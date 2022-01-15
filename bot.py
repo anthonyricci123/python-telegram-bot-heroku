@@ -45,6 +45,7 @@ def random_handler(bot, update):
     logger.info("User {} randomed number {}".format(update.effective_user["id"], number))
     update.message.reply_text("Random number: {}".format(number))
 
+
 def dew_point_handler(bot, update):
     logger.info("Sending dew point info")
     table = pt.PrettyTable(['Location','Dew Point (C)'])
@@ -63,5 +64,6 @@ if __name__ == '__main__':
 
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
     updater.dispatcher.add_handler(CommandHandler("random", random_handler))
+    updater.dispatcher.add_handler(CommandHandler("dewpoint", dew_point_handler))
 
     run(updater)
