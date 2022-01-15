@@ -2,6 +2,8 @@ import logging
 import os
 import random
 import sys
+import prettytable as pt
+from bom_commands import static_site_dict, pull_info_for_site
 
 from telegram.ext import Updater, CommandHandler
 
@@ -16,6 +18,7 @@ TOKEN = os.getenv("TOKEN")
 if mode == "dev":
     def run(updater):
         updater.start_polling()
+
 elif mode == "prod":
     def run(updater):
         PORT = int(os.environ.get("PORT", "8443"))
@@ -41,6 +44,17 @@ def random_handler(bot, update):
     number = random.randint(0, 10)
     logger.info("User {} randomed number {}".format(update.effective_user["id"], number))
     update.message.reply_text("Random number: {}".format(number))
+
+def dew_point_handler(bot, update):
+    logger.info("Sending dew point info")
+    table = pt.PrettyTable(['Location','Dew Point (C)'])
+    table_data = []
+    for location in static_site_dict.keys():
+        table_data.append((location, pull_info_for_site(location, 'dew_point')))
+
+    for location, dew_point in table_data:
+        table.add_row([location, f'{dew_point:.2f}'])
+    update.message.reply_html(f'<pre>{table}</pre>')
 
 
 if __name__ == '__main__':
