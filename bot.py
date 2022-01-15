@@ -45,6 +45,8 @@ def random_handler(bot, update):
 
 if __name__ == '__main__':
     logger.info("Starting bot")
+    print(TOKEN)
+    print(TOKEN.partition(':'))
     updater = Updater(TOKEN)
 
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
